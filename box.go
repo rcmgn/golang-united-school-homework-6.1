@@ -2,6 +2,8 @@ package golang_united_school_homework
 
 import "errors"
 
+const idxOutOfRange = "index out of the box capacity range"
+
 // box contains list of shapes and able to perform operations on them
 type box struct {
 	shapes         []Shape
@@ -29,7 +31,7 @@ func (b *box) AddShape(shape Shape) error {
 // whether shape by index doesn't exist or index went out of the range, then it returns an error
 func (b *box) GetByIndex(i int) (Shape, error) {
 	if i >= b.shapesCapacity {
-		return nil, errors.New("index out of the box capacity range")
+		return nil, errors.New(idxOutOfRange)
 	}
 	return b.shapes[i], nil
 }
@@ -38,7 +40,7 @@ func (b *box) GetByIndex(i int) (Shape, error) {
 // whether shape by index doesn't exist or index went out of the range, then it returns an error
 func (b *box) ExtractByIndex(i int) (s Shape, e error) {
 	if i >= b.shapesCapacity {
-		return nil, errors.New("index out of the box capacity range")
+		return nil, errors.New(idxOutOfRange)
 	}
 	s = b.shapes[i]
 	b.shapes = append(b.shapes[:i], b.shapes[i+1:]...)
@@ -49,9 +51,9 @@ func (b *box) ExtractByIndex(i int) (s Shape, e error) {
 // whether shape by index doesn't exist or index went out of the range, then it returns an error
 func (b *box) ReplaceByIndex(i int, shape Shape) (Shape, error) {
 	if i >= b.shapesCapacity {
-		return nil, errors.New("index out of the box capacity range")
+		return nil, errors.New(idxOutOfRange)
 	}
-	b.shapes = append(b.shapes, shape)
+	b.shapes[i] = shape
 	return shape, nil
 }
 
@@ -75,12 +77,15 @@ func (b *box) SumArea() (result float64) {
 // whether circles are not exist in the list, then returns an error
 func (b *box) RemoveAllCircles() (e error) {
 	e = errors.New("circle is not exist in the list")
-	for i, sh := range b.shapes {
+	var res []Shape
+	for _, sh := range b.shapes {
 		switch sh.(type) {
 		case Circle:
-			b.ExtractByIndex(i)
 			e = nil
+		default:
+			res = append(res, sh)
 		}
 	}
+	b.shapes = res
 	return
 }

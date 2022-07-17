@@ -1,6 +1,9 @@
 package golang_united_school_homework
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 const idxOutOfRange = "index out of the box capacity range"
 
@@ -78,17 +81,19 @@ func (b *box) SumArea() (result float64) {
 // whether circles are not exist in the list, then returns an error
 func (b *box) RemoveAllCircles() (e error) {
 	var res []Shape
+	tmp := fmt.Sprintf("%d ", len(b.shapes))
 	isCircleExist := false
 	for _, sh := range b.shapes {
 		switch sh.(type) {
 		case Circle:
 			isCircleExist = true
+			tmp += "Circle"
 		default:
 			res = append(res, sh)
+			tmp += "Other"
 		}
 	}
 	b.shapes = res
-	b.shapesCapacity = len(res)
 	if !isCircleExist {
 		return errors.New("circle is not exist in the list")
 	}

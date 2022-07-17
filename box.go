@@ -95,7 +95,7 @@ func (b *box) RemoveAllCircles() (e error) {
 	}
 	b.shapes = res
 	if !isCircleExist {
-		return errors.New("circle is not exist in the list")
+		return errors.New("circle is not exist in the list" + tmp + fmt.Sprintf("%d ", len(b.shapes)))
 	}
 	return e
 }
